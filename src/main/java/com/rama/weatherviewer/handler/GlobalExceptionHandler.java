@@ -14,12 +14,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler(LocationNotFoundException.class)
-    public String handleLocationNotFoundException(LocationNotFoundException e, Model model, HttpServletRequest request) {
+    public String handleLocationNotFoundException(LocationNotFoundException e, RedirectAttributes redirectAttributes, HttpServletRequest request) {
         log.warn("Resources access issue: message='{}', IP='{}', URL='{}'", e.getMessage(), request.getRemoteAddr(), request.getRequestURI());
 
-        model.addAttribute("errorMessage", "Location not found or unavailable.");
+        redirectAttributes.addFlashAttribute("errorMessage", "Location not found or unavailable.");
 
-        return "index";
+        return "redirect:/weather";
     }
 
     @ExceptionHandler(UserNotFoundException.class)
