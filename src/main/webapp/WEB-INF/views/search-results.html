@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: head}"></head>
+
+<body>
+
+<nav th:replace="~{fragments :: navigation}"></nav>
+
+<section id="page-content">
+    <div class="container mt-4">
+        <div class="d-flex my-4">
+            <form th:action="@{/weather/search-results}" class="input-group location-search-input-group me-3">
+                <input class="form-control" type="text" name="city" placeholder="Enter location" required>
+
+                <button class="btn btn-outline-secondary btn-sm clear-input-button" type="button"
+                        onclick="this.parentElement.querySelector('input').value=''">
+                    &times;
+                </button>
+
+                <button class="btn btn-outline-success">Search</button>
+            </form>
+        </div>
+
+        <div th:if="${locations != null}">
+            <h2 th:text="${locations.isEmpty() ? 'No locations found.' : 'Locations:'}">Locations:</h2>
+            <div class="row">
+                <div th:each="location : ${locations}" class="col-12 col-lg-3 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body d-flex flex-column">
+                            <h5 th:text="${location.name}" class="card-title">San Francisco</h5>
+                            <strong>Latitude: </strong>
+                            <p th:text="${location.latitude}" class="card-text mb-1">37.7790262</p>
+                            <strong>Longitude: </strong>
+                            <p th:text="${location.longitude}" class="card-text mb-1">-122.419906</p>
+                            <strong>Country: </strong>
+                            <p th:text="${location.country}" class="card-text mb-1">US</p>
+                            <strong>State: </strong>
+                            <p th:text="${location.state}" class="card-text mb-3">California</p>
+                            <div class="mt-auto">
+                                <form th:action="@{/weather/add-location}" method="post">
+                                    <input th:value="${location.name}" type="hidden" name="name">
+                                    <input th:value="${location.latitude}" type="hidden" name="latitude">
+                                    <input th:value="${location.longitude}" type="hidden" name="longitude">
+
+                                    <button class="btn btn-primary w-100">Add</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+
+</body>
+</html>

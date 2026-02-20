@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: head}"></head>
+
+<body>
+
+<nav th:replace="~{fragments :: navigation}"></nav>
+
+<section id="page-content">
+    <div class="container mt-4">
+        <div class="d-flex my-4">
+            <form action="/weather/search-results" class="input-group location-search-input-group me-3">
+                <input class="form-control" type="text" name="city" placeholder="Enter location" required>
+
+                <button class="btn btn-outline-secondary btn-sm clear-input-button" type="button"
+                        onclick="this.parentElement.querySelector('input').value=''">
+                    &times;
+                </button>
+
+                <button class="btn btn-outline-success">Search</button>
+            </form>
+        </div>
+
+        <div>
+            <div class="row">
+                <div th:if="${weatherList.isEmpty()}" class="col-12">
+                    <p class="text-muted text-center">You haven't added any locations yet.</p>
+                </div>
+
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span th:text="${errorMessage}"></span>
+                    <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div th:each="weather : ${weatherList}" class="col-12 col-lg-3 col-md-6 mb-4">
+                    <div class="card h-100 position-relative weather-card">
+
+                        <div class="position-absolute weather-card-delete-form">
+                            <form th:action="@{/weather/delete-location}" method="post">
+                                <input th:value="${weather.locationId}" type="hidden" name="locationId">
+                                <button class="btn-close" aria-label="Delete"></button>
+                            </form>
+                        </div>
+
+                        <img class="card-img-top img-fluid"
+                             th:src="@{'https://openweathermap.org/img/wn/' + ${weather.icon} + '@4x.png'}"
+                             alt="Weather icon">
+
+                        <div class="card-body d-flex flex-column">
+                            <h1 th:text="${weather.temperature} + '°C'" class="card-text">7°C</h1>
+
+                            <h3 class="card-title">
+                                <span th:text="${weather.name}">Tbilisi,</span>
+                                <span th:text="${weather.country}">GE</span>
+                            </h3>
+
+                            <p class="card-text mb-1">
+                                Feels like <span th:text="${weather.feelsLike}">2</span>°C.
+                                <span th:text="${#strings.capitalize(weather.description)}">Clear sky</span>
+                            </p>
+
+                            <p class="card-text mb-1">
+                                Humidity: <span th:text="${weather.humidity}">70</span>%
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+
+<th:block th:replace="~{fragments :: scripts}"></th:block>
+
+</body>
+</html>

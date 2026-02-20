@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: head}"></head>
+
+<body>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <div class="weather-logo"></div>
+        </div>
+    </div>
+
+    <h2 class="text-center mb-5">Sign Up</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-4 col-md-6 col-sm-12">
+            <form th:action="@{/auth/sign-up}" th:object="${userRegistrationDto}" method="post" class="mt-4">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+
+                    <input type="text"
+                           class="form-control"
+                           th:field="*{username}"
+                           th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'"
+                           id="username"
+                           name="username"
+                           required/>
+
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('username')}"
+                         th:errors="*{username}">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+
+                    <input type="password"
+                           class="form-control"
+                           th:field="*{password}"
+                           th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'"
+                           id="password"
+                           name="password"
+                           required/>
+
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('password')}"
+                         th:errors="*{password}">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="repeat-password" class="form-label">Repeat password</label>
+
+                    <input type="password"
+                           class="form-control"
+                           th:field="*{confirmPassword}"
+                           th:classappend="${#fields.hasErrors('confirmPassword')}  ? 'is-invalid'"
+                           id="repeat-password"
+                           name="confirmPassword"
+                           required/>
+
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('confirmPassword')}"
+                         th:errors="*{confirmPassword}">
+                    </div>
+                </div>
+
+                <input type="hidden" name="redirect_to" value="http://localhost/"/>
+
+                <button type="submit" class="btn btn-primary w-100 mt-3">Sign Up</button>
+                <p class="mt-2 text-center">Already have an account? <a th:href="@{/auth/sign-in}">Sign in here</a></p>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:15
+    container_name: weather-db
+    restart: always
+    environment:
+      POSTGRES_DB: weatherviewer
+      POSTGRES_USER: rama
+      POSTGRES_PASSWORD: "rama"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    container_name: weather-app
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "80:8080"
+    environment:
+      - DB_URL=jdbc:postgresql://db:5432/weatherviewer
+
+volumes:
+  postgres_data:
